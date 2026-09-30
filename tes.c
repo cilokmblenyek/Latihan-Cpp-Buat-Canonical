@@ -1,30 +1,16 @@
-#include <stdio.h>
+#include <stdlib.h>  // for qsort
 
-int main() {
-    //input maximum value for array size
-    const int MAX;        // value cannot change after initialization
+int compareInts(const void* a, const void* b) {
+    int ia = *(const int*)a;
+    int ib = *(const int*)b;
+    return (ia > ib) - (ia < ib);   // returns -1, 0, or 1
+}
 
-    printf("MAX:");
-    scanf("%d", &MAX);
-    // Note: in C (unlike C++), a `const int` is NOT a true compile-time constant —
-    // you generally cannot use it as an array size without VLA support:
-    int arr[MAX];                 // legal in C99+ as a Variable Length Array, but
-                                   // NOT portable/standard the way C++'s constexpr is
+int main(void) {
+    int arr[] = {5, 2, 8, 1, 9};
 
-    // const with pointers — same "read right to left" rule as C++
-    const int* p1 = &MAX;
-    
-    printf("p1 points to: %d\n", *p1);
-    // pointer to const int: *p1 = 5 is ILLEGAL
-    int value;
-    printf("value:");
-    scanf("%d", &value);
-
-    int* const p2 = &value;       // const pointer to int: p2 = &other is ILLEGAL
-    const int* const p3 = &value; // both illegal to change
-
-    printf("p2 points to: %d\n", *p2);
-    printf("p3 points to: %d\n", *p3);
+    qsort(arr, 5, sizeof(int), compareInts);   // sorts arr in place, works for any type
+                                                // if you write the right compare function
 
     return 0;
 }
